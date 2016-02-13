@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+	<script>
+		if(localStorage.visits)
+		{
+			localStorage.setItem("visits", Number(localStorage.getItem("visits")) + 1);
+		}
+		else
+		{
+			localStorage.setItem("visits", Number(1));
+		}
+	</script>
+	<head>
+		<title>XF Damage Calculator</title>
+		<link rel="stylesheet" href="desktop.css" media="screen" />
+		<link rel="stylesheet" href="mobile.css" media="only screen and (max-device width:480px)"/>
+		<meta name="viewport" content="width=320,user-scalable=false" />
+	</head>
+
+	<body>
+
+		<p>
+			<img src="XFLogo.png" alt="X-Fighting Logo" width=218px height=auto>
+		</p>
+
+		<p>
+			<img src="SumRndmDdeLogo3.png" alt="SumRndmDde" width = 400px height = auto>
+		</p>
+
+		<h1>X-Fighting<br>Damage Calculator</h1>
+		<h1>Version: 1.32</h1>
+		<p style="background-color:white;">
+			Hello!
+			<br>
+			Welcome to a X-Fighting calculator!
+			<br>
+			<br>
+			The following is a calculator for determining
+			the amount of damage inflicted on a fighter based
+			on the attacking fighter's ATK and BRK alongwith
+			the defending fighter's DEF.
+			<br>
+			<br>
+			This calculator also allows you to view damage done if a critical hit and/or a resiliance parry is preformed using the attacking fighter's CRT and defending fighter's RES.
+			<br>
+			<br>
+			Use this to help test your damage against multiple builds and try to find what works best!
+			<br>
+			<br>
+			Please enjoy!
+			<br>
+			<br>
+			- SumRndmDde aka. Robert
+			<br>
+			<br>
+		</p>
+
+		<p>
+			<img src="SumRndmDdeLogo3.png" alt="SumRndmDde" width = 400px height = auto>
+		</p>
+
+		<p style="background-color:#6495ED;">
+			<br>
+			<font size="5" style="text-decoration: underline">Attacker:</font>
+			<br>
+			<br>
+			Attacker's MIN ATK:
+			<br>
+			<input type="tel" onchange="getDamage()" id="UserMIN" name="UserMIN" value="1000"><br>
+			<br>
+			Attacker's MAX ATK:
+			<br>
+			<input type="tel" onchange="getDamage()" id="UserMAX" name="UserMAX" value="1500"><br>
+			<br>
+			Attacker's BRK:
+			<br>
+			<input type="tel" onchange="getDamage()" id="UserBRK" name="UserBRK" value="500"><br>
+			<br>
+			Attacker's CRT:
+			<br>
+			(only needed for Critical Hits)
+			<br>
+			<input type="tel" onchange="getDamage()" id="UserCRT" name="UserCRT" value="500"><br>
+			<br>
+			Attacker's Current HP:
+			<br>
+			(only needed for Barbarism)
+			<br>
+			<input type="tel" onchange="getDamage()" id="UserHP" name="UserHP" value="2500"><br>
+			<br>
+			Attacker's Max HP:
+			<br>
+			(only needed for Barbarism)
+			<br>
+			<input type="tel" onchange="getDamage()" id="UserMHP" name="UserMHP" value="5000"><br>
+			<br>
+		</p>
+		<p style="background-color:#9ACD32;">
+			<br>
+			<font size="5" style="text-decoration: underline">Defender:</font>
+			<br>
+			<br>
+			Defender's DEF:
+			<br>
+			<input type="tel" onchange="getDamage()" id="TargetDEF" name="TargetDEF" value="1000"><br>
+			<br>
+			Defender's Max HP:
+			<br>
+			<input type="tel" onchange="getDamage()" id="TargetMHP" name="TargetMHP" value="5000"><br>
+			<br>
+			Defender's RES:
+			<br>
+			(only needed for Critical Hits)
+			<br>
+			<input type="tel" onchange="getDamage()" id="TargetRES" name="TargetRES" value="250"><br>
+			<br>
+		</p>
+		<p style="background-color:#FF7F50;">
+			<br>
+			<font size="5" style="text-decoration: underline">Skill:</font>
+			<br>
+			<br>
+			Skill Used
+			<br>
+			<select id="Skills" onchange='updateResults()'>
+				<option value="normalattack">Normal Attack</option>
+				<option value="petattack">Pet Attack</option>
+  				<option value="bacteria">Bacteria</option>
+  				<option value="firemeteorite">Fire Meterorite</option>
+  				<option value="fireshield">Fire Shield</option>
+  				<option value="lightningball">Lightning Ball</option>
+  				<option value="thunderboltboxing">Thunderbolt Boxing</option>
+  				<option value="stormboxing">Storm Boxing</option>
+  				<option value="heavyhammer">Heavy Hammer</option>
+  				<option value="explosiveblow">Explosive Blow</option>
+  				<option value="counterattack">Counterattack</option>
+  				<option value="bomb">Bomb</option>
+  				<option value="poisonousfog">Poisonous Fog</option>
+  				<option value="ghoulblock">Ghoul Block</option>
+  				<option value="skillshackles">Skill Shackles</option>
+  				<option value="assassinate">Assassinate</option>
+  				<option value="drawpower">Draw Power</option>
+			</select> 
+			<br>
+			<br>
+			Element is PRO? <input type="checkbox" name="pro" id="Pro" value="Pro" onchange="updateResults()" checked>
+			<br>
+			<br>
+			<br>
+			Skill Multiplier:
+			<br>
+			<input type="tel" onchange="getDamage()" id="SkillMultipler" name="SkillMultipler" value="100"><br>
+			<br>
+		</p>
+		<p style="background-color:#FFA500">
+			<br>
+			<font size="5" style="text-decoration: underline">Extra Factors:</font>
+			<br>
+			<br>
+			<input type="checkbox" name="crt" id="Crt" value="Crt" onchange='getDamage()'> Critical Hit<br>
+			<input type="checkbox" name="res" id="Res" value="Res" onchange='getDamage()'> Parried Hit<br>
+			<br>
+			<input type="checkbox" name="fastmove" id="FastMove" value="FastMove" onchange='getDamage()'> Fast Move Used<br>
+			<input type="checkbox" name="barbarism" id="Barbarism" value="Barbarism" onchange='getDamage()'> Barbarism Used<br>
+			<input type="checkbox" name="ghoulblock" id="GhoulBlock" value="GhoulBlock" onchange='getDamage()'> Ghoul Block Used<br>
+			<br>
+		</p>
+
+		<p>
+			<img src="SumRndmDdeLogo3.png" alt="SumRndmDde" width = 400px height = auto>
+		</p>
+
+		<p id="Results" style="background-color:white;">
+			<br>
+			<font size='5' style='text-decoration: underline'>Results:</font>
+			<br><br><br>
+			<button onclick='getDamage()'>
+				<font size="3">Find Damage</font>
+			</button>
+			<br><br>
+		</p>
+		<br>
+		<p>
+			<img src="SumRndmDdeLogo3.png" alt="SumRndmDde" width = 400px height = auto>
+		</p>
+		<br>
+		<p style="background-color:lightblue;">
+			<br>
+			Special Thanks to:<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>AHP</font><br>
+			For giving the data necessary in order to find Chaos Fighters' Damage Formula.<br>
+			This would probably not exist if it weren't for him.<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>Aladdin (LOLOLS)</font><br>
+			For helping find a large amount of errors in the calculator during the developement process along with helping with testing on multiple devices.<br>
+			This would probably still exist if it weren't for him, but it would not be as good.<br>
+			<br>
+		</p>
+		<br>
+		<br>
+		<p style="font-family:terminal;background-color:#F0E68C;">
+			<br>
+			Changelog:<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version 1.32]</font><br>
+			Changed Default Values<br>
+			Fixed Average "Hits Until KO"<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version 1.31]</font><br>
+			Fixed Major Bug<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version 1.30]</font><br>
+			Added "Hits Until KO" Section<br>
+			Added Ghoul Block to Extra Factors<br>
+			Removed Evaded Hit to Extra Factors<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version 1.20]</font><br>
+			Added Evaded Hit to Extra Factors<br>
+			Added Percents to Damage Results<br>
+			Added other important stuff<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version 1.10]</font><br>
+			Made Dynamic Extra Factors for Results<br>
+			Added Max HP for Attacker and Defender<br>
+			Added Current HP for Attacker<br>
+			Added Barbarism to Extra Factors<br>
+			Added Fast Move to Extra Factors<br>
+			Added Heavy Hammer to Skills<br>
+			Removed Fast Move from Skills<br>
+			Multipliers -> Modifiers<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version 1.00]</font><br>
+			Official Release Version<br>
+			Rewrote some of the intro paragraph.<br>
+			Added contact info at the bottom.<br>
+			Also gave credit to some people...<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version Beta 1.50]</font><br>
+			Added "Force Refresh" button for Results<br>
+			Seperated the Results into two sections<br>
+			Added Khaki Background.<br>
+			Fixed Fire Shield's Skill Multiplier<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version Beta 1.42]</font><br>
+			Poisonous*<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version Beta 1.41]</font><br>
+			Added Fire Shield, Fast Move, and Poisonout Fog<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version Beta 1.40]</font><br>
+			Results now Update Automatically<br>
+			Added Support for Critical Hits<br>
+ 			Added Support for Parries<br>
+ 			Added Different Colors for each Section<br>
+ 			Removed Light Green Background<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version Beta 1.30]</font><br>
+			Added Psuedo-Mobile Version<br>
+ 			Added Backgrounds to Results and Changelog<br>
+ 			Shrunk CF Logo<br>
+ 			<br>
+			<font size="3" style='text-decoration: underline'>[Version Beta 1.20]</font><br>
+			Added Changelog<br>
+ 			Skill Selector Added<br>
+ 			Skill PRO Checkbox<br>
+ 			Changed Default Values<br>
+ 			<br>
+			<font size="3" style='text-decoration: underline'>[Version Beta 1.10]</font><br>
+ 			Skill Multiplier Added<br>
+ 			<br>
+			<font size="3" style='text-decoration: underline'>[Version Beta 1.00]</font><br>
+ 			Calculator Created<br>
+ 			<br>
+		</p>
+
+		<p>
+			<br>
+			<br>
+			<br>
+			Found an error?<br>
+			Wish to request something?<br>
+			My LINE ID is 'SumRndmDde'<br>
+		</p>
+
+	</body>
+
+	<code>
+
+	</code>
+
+	<script>
+		var skillTextBox = document.getElementById("SkillMultipler");
+		var skillDropBox = document.getElementById("Skills");
+		var skillPro = document.getElementById("Pro");
+		var critical = document.getElementById("Crt");
+		var parry = document.getElementById("Res");
+		//var evade = document.getElementById("Eva");
+		var fastMove = document.getElementById("FastMove");
+		var barbarism = document.getElementById("Barbarism");
+		var ghoulblock = document.getElementById("GhoulBlock");
+
+		function getDamage()
+		{
+			var max =  Number(document.getElementById('UserMAX').value);
+			var min =  Number(document.getElementById('UserMIN').value);
+			var brk =  Number(document.getElementById('UserBRK').value);
+			var crt =  Number(document.getElementById('UserCRT').value);
+			var hp =  Number(document.getElementById('UserHP').value);
+			var mhp =  Number(document.getElementById('UserMHP').value);
+			var def =  Number(document.getElementById('TargetDEF').value);
+			var res =  Number(document.getElementById('TargetRES').value);
+			var omhp =  Number(document.getElementById('TargetMHP').value);
+			var skill =  Number(document.getElementById('SkillMultipler').value);
+
+			var skillRatio = skill / 100;
+
+			var multiplier;
+			if(brk == def)
+			{
+				multiplier = 1.00;
+			}
+			else if(def > brk)
+			{
+				multiplier = (1 / (1 + ((def - brk) * (2/3000))));
+			}
+			else if(def < brk)
+			{
+				multiplier = (1 + ((brk - def) * (2/1000)));
+			}
+
+			var critMultiplier = (2 + ((crt - res) * (2/1000)));
+
+			if(critMultiplier < 1)
+			{
+				critMultiplier = 1;
+			}
+
+			var resMultiplier = 0.5;
+			var fastMoveMultiplier = 0.6;
+
+			var modifiedMultiplier = (multiplier * 100).toFixed(1);
+			var modifiedMultiplierCrt = (critMultiplier * 100).toFixed(1);
+			var minimumDamageMod = Math.floor(min * skillRatio);
+			var maximumDamageMod = Math.floor(max * skillRatio);
+			var finalMod = String(minimumDamageMod) + " ~ " + String(maximumDamageMod);
+
+			var barbarismMod = "";
+
+			if(barbarism.checked)
+			{
+				barbarismMod = "<br><br>Barbarism Modifier: ";
+
+				var hpRatio = Math.floor((hp / mhp) * 100);
+				hpRatio = 100 - hpRatio;
+				
+				var bonusGain = ((hpRatio * 0.5) / 100) + 1;
+				var barbarismGain = bonusGain * 100;
+
+				barbarismMod += String((barbarismGain).toFixed(1)) + "% Attack";
+
+				min *= bonusGain;
+				max *= bonusGain;
+			}
+
+			var ghoulblockMod = "";
+
+			if(ghoulblock.checked)
+			{
+				ghoulblockMod = "<br><br>Ghoul Block Modifier: 25% Attack";
+
+				min *= 0.75;
+				max *= 0.75;
+			}
+
+			var minimumDamage = Math.floor((min * skillRatio) * multiplier);
+			var maximumDamage = Math.floor((max * skillRatio) * multiplier);
+
+			if(skillDropBox.value == "heavyhammer")
+			{
+				var addition = Math.floor(omhp * ((skillPro.checked) ? 0.08:0.07));
+				var percentGain = (skillPro.checked) ? 8:7;
+
+				finalMod = String(finalMod) + " + " + String(percentGain) + "% Enemy HP" + " ("+ String(addition) +")";
+
+				minimumDamage += addition;
+				maximumDamage += addition;
+			}
+
+			var criticalMultiplier = "";
+
+			if(critical.checked)
+			{
+				criticalMultiplier = "<br><br>Critical Modifier: " + String(modifiedMultiplierCrt) + "% Damage";
+
+				minimumDamage = Math.floor(minimumDamage * critMultiplier);
+				maximumDamage = Math.floor(maximumDamage * critMultiplier);
+			}
+
+			var parryMod = "";
+			if(parry.checked)
+			{
+				parryMod = "<br><br>Parry Modifier: 50% Damage"
+
+				minimumDamage = Math.floor(minimumDamage * resMultiplier);
+				maximumDamage = Math.floor(maximumDamage * resMultiplier);
+			}
+			/*
+			var evadeMod = "";
+			if(evade.checked)
+			{
+				evadeMod = "<br><br>Evade Modifier: 0% Damage"
+
+				minimumDamage = Math.floor(minimumDamage * 0);
+				maximumDamage = Math.floor(maximumDamage * 0);
+			}
+			*/
+			var fastmoveMod = "";
+			if(fastMove.checked)
+			{
+				fastmoveMod = "<br><br>Fast Move Modifier: 60% Damage"
+
+				minimumDamage = Math.floor(minimumDamage * fastMoveMultiplier);
+				maximumDamage = Math.floor(maximumDamage * fastMoveMultiplier);
+			}
+
+			if(barbarismMod == "" && criticalMultiplier == "" && parryMod == "" && fastmoveMod == "" && ghoulblockMod == "")
+			{
+				barbarismMod = "<br><br>None";
+			}
+
+			var averageDamage = Math.floor((minimumDamage + maximumDamage) / 2);
+
+			var minimumDamagePercent = ((minimumDamage / omhp) * 100).toFixed(1);
+			var maximumDamagePercent = ((maximumDamage / omhp) * 100).toFixed(1);
+			var averageDamagePercent = ((averageDamage / omhp) * 100).toFixed(1);
+
+			var worstCase = Math.ceil(omhp / minimumDamage);
+			var bestCase = Math.ceil(omhp / maximumDamage);
+			var averageCase = Math.ceil(omhp / averageDamage);
+
+			if(min <= max)
+			{
+				document.getElementById('Results').style = "background-color:white;";
+
+				document.getElementById('Results').innerHTML = 
+				"<br><font size='5' style='text-decoration: underline'>Results:</font><br><br><br><font size='4' style='text-decoration: underline'>Basic Modifiers:</font><br><br>Base ATK (ATK * Skill): " + finalMod + "<br><br>Break/Defense Modifier: " + String(modifiedMultiplier) + "%<br><br><br><font size='4' style='text-decoration: underline'>Extra Modifiers:</font> " + String(criticalMultiplier) + " " + String(parryMod) + " " + String(fastmoveMod) + " " + String(barbarismMod) + " " + String(ghoulblockMod) + "<br><br><hr><br><br><font size='4' style='text-decoration: underline'>Damage Values:</font><br><br>Minimum Possible Damage is: " + String(minimumDamage) + " (" + String(minimumDamagePercent) + "%)<br><br>Maximum Possible Damage is: " + String(maximumDamage) + " (" + String(maximumDamagePercent) + "%)<br><br>Average Damage is: " + String(averageDamage) + " (" + String(averageDamagePercent) + "%)<br><br><br><font size='4' style='text-decoration: underline'>Hits Until KO:</font><br><br>" + String(worstCase) + " Hits, Worst Case Scenario.<br><br>" + String(bestCase) + " Hits, Best Case Scenario.<br><br>" + String(averageCase) + " Hits, on Average.<br><br>";
+			}
+			else
+			{
+				document.getElementById('Results').style = "background-color:#ffb3b3;";
+
+				document.getElementById('Results').innerHTML = 
+				"<br><font size='5' style='text-decoration: underline'>Results:</font><br><br><br><font size='4' style='text-decoration: underline'>Basic Modifiers:</font><br><br>Base ATK (ATK * Skill): " + finalMod + "<br><br>Break/Defense Modifier: " + String(modifiedMultiplier) + "%<br><br><br><font size='4' style='text-decoration: underline'>Extra Modifiers:</font> " + String(criticalMultiplier) + " " + String(parryMod) + " " + String(fastmoveMod) + " " + String(barbarismMod) + " " + String(ghoulblockMod) + "<br><br><hr><br><br><font size='4' style='text-decoration: underline'>Damage Values:</font><br><br>Your MIN ATK is higher than your MAX ATK?<br>That's weird...<br>You should fix that.<br><br><br><br>";
+			}
+		}
+
+		function updateResults()
+		{
+			switch(skillDropBox.value)
+			{
+				case "normalattack":
+					skillTextBox.value = 100;
+					break;
+				case "petattack":
+					skillTextBox.value = 50;
+					break;
+				case "bacteria":
+					skillTextBox.value = (skillPro.checked) ? 115:110;
+					break;
+				case "firemeteorite":
+					skillTextBox.value = (skillPro.checked) ? 140:130;
+					break;
+				case "fireshield":
+					skillTextBox.value = (skillPro.checked) ? 35:30;
+					break;
+				case "lightningball":
+					skillTextBox.value = (skillPro.checked) ? 170:160;
+					break;
+				case "thunderboltboxing":
+					skillTextBox.value = (skillPro.checked) ? 85:80;
+					break;
+				case "stormboxing":
+					skillTextBox.value = (skillPro.checked) ? 113:108;
+					break;
+				case "heavyhammer":
+					skillTextBox.value = 100;
+					break;
+				case "explosiveblow":
+					skillTextBox.value = (skillPro.checked) ? 257:250;
+					break;
+				case "counterattack":
+					skillTextBox.value = (skillPro.checked) ? 149:144;
+					break;
+				case "bomb":
+					skillTextBox.value = (skillPro.checked) ? 220:210;
+					break;
+				case "poisonousfog":
+					skillTextBox.value = (skillPro.checked) ? 40:33;
+					break;
+				case "ghoulblock":
+					skillTextBox.value = (skillPro.checked) ? 100:100;
+					break;
+				case "skillshackles":
+					skillTextBox.value = (skillPro.checked) ? 100:100;
+					break;
+				case "assassinate":
+					skillTextBox.value = (skillPro.checked) ? 100:100;
+					break;
+				case "drawpower":
+					skillTextBox.value = (skillPro.checked) ? 110:100;
+					break;
+			}
+
+			getDamage();
+		}
+	</script>
+</html>
