@@ -10,6 +10,7 @@
 			localStorage.setItem("visits", Number(1));
 		}
 	</script>
+
 	<head>
 		<title>XF Damage Calculator</title>
 		<link rel="stylesheet" href="desktop.css" media="screen" />
@@ -28,7 +29,7 @@
 		</p>
 
 		<h1>X-Fighting<br>Damage Calculator</h1>
-		<h1>Version: 1.32</h1>
+		<h1>Version: 1.40</h1>
 		<p style="background-color:white;">
 			Hello!
 			<br>
@@ -98,6 +99,19 @@
 		<p style="background-color:#9ACD32;">
 			<br>
 			<font size="5" style="text-decoration: underline">Defender:</font>
+			<br>
+			<br>
+			Presets:
+			<br>
+			<select id="Presets" onchange='setPreset()'>
+				<option value="d">Default</option>
+				<option value="hh">Heavy Hitter</option>
+				<option value="th">Tanky Hitter</option>
+				<option value="speed">Power Speedster</option>
+				<option value="bulkys">Bulky Speedster</option>
+  				<option value="tank">Tank</option>
+  				<option value="eva">Evader</option>
+			</select> 
 			<br>
 			<br>
 			Defender's DEF:
@@ -202,6 +216,11 @@
 		<p style="font-family:terminal;background-color:#F0E68C;">
 			<br>
 			Changelog:<br>
+			<br>
+			<font size="3" style='text-decoration: underline'>[Version 1.40]</font><br>
+			Actual Release Version<br>
+			Added "Presets" to Defender Section<br>
+			Created X-Fighing Version<br>
 			<br>
 			<font size="3" style='text-decoration: underline'>[Version 1.32]</font><br>
 			Changed Default Values<br>
@@ -511,6 +530,68 @@
 					skillTextBox.value = (skillPro.checked) ? 110:100;
 					break;
 			}
+
+			getDamage();
+		}
+
+		function setPreset()
+		{
+			var presetDropBox = document.getElementById("Presets");
+			
+			var def =  Number(document.getElementById('TargetDEF').value);
+			var res =  Number(document.getElementById('TargetRES').value);
+			var omhp =  Number(document.getElementById('TargetMHP').value);
+
+			var newDef;
+			var newRes;
+			var newMhp;
+
+			switch(presetDropBox.value)
+			{
+				case "d":
+					newDef = 1000;
+					newRes = 250;
+					newMhp = 5000;
+					break;
+				case "hh":
+					newDef = 2000;
+					newRes = 200;
+					newMhp = 8000;
+					break;
+				case "th":
+					newDef = 2000;
+					newRes = 600;
+					newMhp = 13000;
+					break;
+				case "speed":
+					newDef = 2000;
+					newRes = 100;
+					newMhp = 6000;
+					break;
+				case "bulkys":
+					newDef = 2200;
+					newRes = 800;
+					newMhp = 12000;
+					break;
+				case "tank":
+					newDef = 2400;
+					newRes = 1200;
+					newMhp = 30000;
+					break;
+				case "eva":
+					newDef = 2000;
+					newRes = 400;
+					newMhp = 10000;
+					break;
+
+				newDef = 1000;
+				newRes = 100;
+				newMhp = 10000;
+			}
+
+			document.getElementById('TargetDEF').value = Number(newDef);
+			document.getElementById('TargetRES').value = Number(newRes);
+			document.getElementById('TargetMHP').value = Number(newMhp);
 
 			getDamage();
 		}
